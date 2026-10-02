@@ -2,9 +2,14 @@ package br.com.carstore.dao;
 
 import br.com.carstore.model.Car;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CarDao {
 
@@ -35,4 +40,43 @@ public class CarDao {
 
     }
 
+    public List<Car> findAllCars(){
+
+        String SQL = "SELECT * FROM CAR";
+
+        try{
+        Connection connection = DriverManager.getConnection("jdbc:h2:~/test", "sa", "sa");
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+
+        System.out.println("conexao estabelecida com o bd");
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Car> cars = new ArrayList<>();
+
+        while (resultSet.next()){
+
+            String name = resultSet.getString("name");
+
+            Car car = new Car(name);
+
+
+            cars.add(car);
+        }
+
+        System.out.println("sucesso ao consultar o banco de dados");
+
+        connection.close();
+
+            return cars;
+
+        } catch (Exception e) {
+
+            System.out.println("Erro ao consultar os dados no DB" + e.getMessage());
+
+            return Collections.emptyList();
+        }
+    }
+
 }
+
