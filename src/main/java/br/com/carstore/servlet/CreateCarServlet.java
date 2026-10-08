@@ -21,6 +21,7 @@ public class CreateCarServlet extends HttpServlet {
         Car car = new Car(carName);
 
 
+
         carDao.createCar(car);
 
         resp.sendRedirect("/find-all-cars");
